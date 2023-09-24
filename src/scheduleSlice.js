@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { days, times } from "./constants"; // adjust the path based on where the constants.js file is relative to the other files
+import { days, times } from "./constants"; 
 
 const generateAvailability = (availableHours) => {
   return times.reduce((acc, time) => {

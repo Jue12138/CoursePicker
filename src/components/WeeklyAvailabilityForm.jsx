@@ -3,6 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { days, times } from "../constants";
 import { bookSlot as bookSlotAction, updateSchedule } from "../scheduleSlice"; // adjust the path if needed
 
+const defaultAvailability = days.reduce((acc, day) => {
+  acc[day] = times.reduce((timeAcc, time) => {
+    timeAcc[time] = "unavailable";
+    return timeAcc;
+  }, {});
+  return acc;
+}, {});
+
 function WeeklyAvailabilityForm({ teacher }) {
   const dispatch = useDispatch();
   const availability = useSelector(
@@ -11,14 +19,6 @@ function WeeklyAvailabilityForm({ teacher }) {
 
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [studentName, setStudentName] = useState("");
-
-  const defaultAvailability = days.reduce((acc, day) => {
-    acc[day] = times.reduce((timeAcc, time) => {
-      timeAcc[time] = "unavailable";
-      return timeAcc;
-    }, {});
-    return acc;
-  }, {});
 
   const handleSlotClick = (day, time) => {
     console.log("Slot clicked", day, time); // <-- Add this line
@@ -34,6 +34,9 @@ function WeeklyAvailabilityForm({ teacher }) {
         const fetchedData = await response.json();
 
         const parsedAvailability = days.reduce((acc, day) => {
+          console.log(
+            `Current acc: ${JSON.stringify(acc)}, Current day: ${day}`
+          ); // <-- Debug line
           acc[day] = times.reduce((timeAcc, time) => {
             const slot = fetchedData.find(
               (slot) =>
@@ -44,13 +47,12 @@ function WeeklyAvailabilityForm({ teacher }) {
 
             timeAcc[time] = slot
               ? slot.student_name
-              : defaultAvailability[day][time] || " "; // If no slot, keep default.
+              : defaultAvailability[day][time] || " ";
             return timeAcc;
           }, {});
           return acc;
-        });
+        }, {});
 
-        // Update Redux store with the parsed data
         dispatch(updateSchedule({ [teacher]: parsedAvailability }));
       } catch (error) {
         console.error("Error fetching the schedule:", error);
