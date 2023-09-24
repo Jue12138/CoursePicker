@@ -8,11 +8,12 @@ Course Picker is a comprehensive online platform designed for course selection a
 3. Full-course data operations
 4. Efficient state management
 5. RESTful API for seamless data flow
-6. Technologies Used
-7. Frontend: React, Redux
-8. Backend: Node.js, Express
-9. Database: PostgreSQL
-10. Others: RESTful APIs, HTML, CSS, JavaScript
+
+## Technologies Used
+1. Frontend: React, Redux
+2. Backend: Node.js, Express
+3. Database: PostgreSQL
+4. Others: RESTful APIs, HTML, CSS, JavaScript
 
 ## Installation & Setup
 
