@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { days, times } from "../constants";
-import { bookSlot as bookSlotAction, updateSchedule } from "../scheduleSlice"; // adjust the path if needed
+import { bookSlot as bookSlotAction, updateSchedule } from "../scheduleSlice"; 
 
 const defaultAvailability = days.reduce((acc, day) => {
   acc[day] = times.reduce((timeAcc, time) => {
@@ -21,7 +21,6 @@ function WeeklyAvailabilityForm({ teacher }) {
   const [studentName, setStudentName] = useState("");
 
   const handleSlotClick = (day, time) => {
-    console.log("Slot clicked", day, time); // <-- Add this line
     if (availability[day]?.[time] === null) {
       setSelectedSlot({ day, time });
     }
@@ -34,9 +33,6 @@ function WeeklyAvailabilityForm({ teacher }) {
         const fetchedData = await response.json();
 
         const parsedAvailability = days.reduce((acc, day) => {
-          console.log(
-            `Current acc: ${JSON.stringify(acc)}, Current day: ${day}`
-          ); // <-- Debug line
           acc[day] = times.reduce((timeAcc, time) => {
             const slot = fetchedData.find(
               (slot) =>

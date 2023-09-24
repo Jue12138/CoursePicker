@@ -6,7 +6,7 @@ const cors = require("cors");
 
 const app = express();
 
-app.use(cors()); // <-- Use the CORS middleware
+app.use(cors()); 
 app.use(bodyParser.json());
 
 const fetch = require('node-fetch'); 
