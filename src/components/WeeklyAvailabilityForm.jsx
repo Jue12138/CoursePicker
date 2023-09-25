@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { days, times } from "../constants";
-import { bookSlot as bookSlotAction, updateSchedule } from "../scheduleSlice"; 
+import { bookSlot as bookSlotAction, updateSchedule } from "../scheduleSlice";
 
 const defaultAvailability = days.reduce((acc, day) => {
   acc[day] = times.reduce((timeAcc, time) => {
@@ -23,6 +23,13 @@ function WeeklyAvailabilityForm({ teacher }) {
   const handleSlotClick = (day, time) => {
     if (availability[day]?.[time] === null) {
       setSelectedSlot({ day, time });
+    } else if (availability[day]?.[time] !== "unavailable") {
+      const confirmCancel = window.confirm(
+        `Do you want to cancel the booking for ${day} at ${time}?`
+      );
+      if (confirmCancel) {
+        cancelBooking(day, time);
+      }
     }
   };
 
@@ -94,6 +101,39 @@ function WeeklyAvailabilityForm({ teacher }) {
 
       setSelectedSlot(null);
       setStudentName("");
+    }
+  };
+
+  const cancelBooking = async (day, time) => {
+    try {
+      const response = await fetch("http://localhost:3001/cancel-slot", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          teacher: teacher,
+          day: day,
+          time: time,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        dispatch(
+          bookSlotAction({
+            day: day,
+            time: time,
+            student: null, // Reset the student field to make it available
+            teacher: teacher,
+          })
+        );
+      } else {
+        console.error("Failed to cancel the slot");
+      }
+    } catch (error) {
+      console.error("There was an error:", error);
     }
   };
 

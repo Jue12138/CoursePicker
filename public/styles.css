@@ -45,6 +45,20 @@ header h1 {
   font-weight: 200;
 }
 
+#container {
+  text-align: center;
+}
+
+#center-forms {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.set-space {
+  padding: 0.3%;
+}
 
 footer {
   position: absolute;

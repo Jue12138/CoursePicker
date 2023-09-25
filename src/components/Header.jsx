@@ -9,7 +9,6 @@ function Header() {
       </h1>
       <div className="links-container">
         <Link className="comment-link" to="/">Home</Link>
-        <Link className="comment-link" to="/schedule">Schedule</Link>
         <Link className="comment-link" to="/comment">Comment</Link>
       </div>
     </header>

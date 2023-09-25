@@ -152,3 +152,28 @@ app.get("/current-schedule", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+app.post("/cancel-slot", async (req, res) => {
+  try {
+    const { teacher, day, time } = req.body;
+
+    // Check for an existing slot
+    const existingSlot = await db.oneOrNone(
+      "SELECT * FROM teacher_schedule WHERE teacher_name = $1 AND day = $2 AND time = $3",
+      [teacher, day, time]
+    );
+
+    // If an existing slot is found, update its student_name to null
+    if (existingSlot) {
+      await db.none("UPDATE teacher_schedule SET student_name = NULL WHERE id = $1", [
+        existingSlot.id,
+      ]);
+      res.status(200).json({ success: true });
+    } else {
+      res.status(404).json({ error: "Slot not found" });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
